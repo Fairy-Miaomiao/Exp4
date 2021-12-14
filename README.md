@@ -310,7 +310,7 @@ print('test f1-score is : %f'%(2*recal*prec/(prec+recal)))
 
 逻辑回归模型评估
 
-| accuracy  | 0.44 |
+| accuracy  | 0.84 |
 | --------- | ---- |
 | recall    | 0.42 |
 | precision | 0.66 |
@@ -320,7 +320,7 @@ print('test f1-score is : %f'%(2*recal*prec/(prec+recal)))
 
 ## 遇到的问题
 
-### 1、TypeError:an integer is required(got type bytes)
+### 1、TypeError:an integer is required(got type bytes)及一系列安装
 
 问题描述：在Anaconda Powershell Prompt中输入pyspark查看是否安装成功时，显示TypeError:an integer is required(got type bytes)
 
@@ -330,11 +330,59 @@ print('test f1-score is : %f'%(2*recal*prec/(prec+recal)))
 
 ![image-20211213165152885](C:\Users\dell\AppData\Roaming\Typora\typora-user-images\image-20211213165152885.png)
 
+但是问题并没有完全解决，在第一次运行代码，也就是import各种包的时候，依然报了如下的错
 
+![image-20211213202054542](C:\Users\dell\AppData\Roaming\Typora\typora-user-images\image-20211213202054542.png)
+
+然后依照众多教程，在代码前面加了两行
+
+![image-20211213202421330](C:\Users\dell\AppData\Roaming\Typora\typora-user-images\image-20211213202421330.png)
+
+在anaconda的官网上可以找到，findspark是一个寻找spark并让他可导的一个包，然而实际上并没有
+
+![image-20211213202328937](C:\Users\dell\AppData\Roaming\Typora\typora-user-images\image-20211213202328937.png)
+
+这时，报错信息中的Py4J引起了我的注意
+
+> Py4j可以使运行于python解释器的python程序动态的访问java虚拟机中的java对象。Java方法可以像java对象就在python解释器里一样被调用，[Java ](http://lib.csdn.net/base/java)collection也可以通过标准python collection方法调用。Py4j也可以使java程序回调python对象。
+
+最终解决方法：于是事情清晰了起来，原来在Anaconda Powershell Prompt使用pip install pyspark的时候会默认下载最新版的pyspark和py4j，这和我自己装的pyspark版本不匹配，所以需要重新下载对应版本的Py4j，或者重新pip install当前版本pyspark也能获得对应版本的Py4j
+
+![image-20211213203026882](C:\Users\dell\AppData\Roaming\Typora\typora-user-images\image-20211213203026882.png)
 
 
 
 ## 其他思考
+
+### 很不准确的逻辑回归和其他模型
+
+从前面代码实现部分任务四最后的结果来看，使用逻辑回归的分类效果很不理想，于是想到用其他分类模型来尝试
+
+观察任务四的代码，逻辑回归主要是使用的pyspark.ml.classification这个包，于是打开源码来看一下这个包里面还实现了一些什么其他算法，源码可在Anaconda文件夹下的Lib\site-packages\pyspark\ml.classification.py中查看
+
+这个包一共实现了10个分类模型
+
+```python
+__all__ = ['LinearSVC', 'LinearSVCModel',
+           'LogisticRegression', 'LogisticRegressionModel',
+           'LogisticRegressionSummary', 'LogisticRegressionTrainingSummary',
+           'BinaryLogisticRegressionSummary', 'BinaryLogisticRegressionTrainingSummary',
+           'DecisionTreeClassifier', 'DecisionTreeClassificationModel',
+           'GBTClassifier', 'GBTClassificationModel',
+           'RandomForestClassifier', 'RandomForestClassificationModel',
+           'NaiveBayes', 'NaiveBayesModel',
+           'MultilayerPerceptronClassifier', 'MultilayerPerceptronClassificationModel',
+           'OneVsRest', 'OneVsRestModel']
+```
+
+首先尝试了GBTClassifier，训练模型花了很久时间
+
+|           | GBTClassifier |
+| --------- | ------------- |
+| Accuracy  | 0.83          |
+| Recal     | 0.40          |
+| Precision | 0.65          |
+| f1 score  | 0.50          |
 
 
 
@@ -343,3 +391,5 @@ print('test f1-score is : %f'%(2*recal*prec/(prec+recal)))
 [PySpark - 教程_学习PySpark|WIKI教程 (iowiki.com)](https://iowiki.com/pyspark/pyspark_index.html)
 
 [pySpark在csv文件中的一些应用 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/194193368)
+
+[Spark MLib 每周一算法 —— LogisticRegression | Spark MLib wctkn (ratlsun.github.io)](https://ratlsun.github.io/2018/02/19/LogisticRegression/)
