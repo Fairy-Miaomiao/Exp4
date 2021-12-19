@@ -354,7 +354,7 @@ print('test f1-score is : %f'%(2*recal*prec/(prec+recal)))
 
 ## 其他思考
 
-### 很不准确的逻辑回归和其他模型
+### 很不召回的逻辑回归和其他模型
 
 从前面代码实现部分任务四最后的结果来看，使用逻辑回归的分类效果很不理想，于是想到用其他分类模型来尝试
 
@@ -375,16 +375,20 @@ __all__ = ['LinearSVC', 'LinearSVCModel',
            'OneVsRest', 'OneVsRestModel']
 ```
 
-首先尝试了GBTClassifier，训练模型花了很久时间
+首先尝试了GBTClassifier，训练模型花了很久时间，其他各个模型也都跑了一段时间，其中MultilayerPerceptronClassifier时间最久，大约40分钟，模型能训练，但是无法实现预测，总是报错，不知道有没有其他同学能预测出来。
 
-|           | GBTClassifier |
-| --------- | ------------- |
-| Accuracy  | 0.83          |
-| Recal     | 0.40          |
-| Precision | 0.65          |
-| f1 score  | 0.50          |
+而随机森林把所有样本都预测成了不会违约，这也导致Precision和f1 score无法运算
 
+|           | GBTClassifier | LinearSVC | RandomForestClassifier     | DecisionTreeClassifier | OneVsRest |
+| --------- | ------------- | --------- | -------------------------- | ---------------------- | --------- |
+| Accuracy  | 0.83          | 0.84      | 0.80                       | 0.83                   | 0.84      |
+| Recal     | 0.40          | 0.37      | 0（那所有样本都预测成了0） | 0.35                   | 0.39      |
+| Precision | 0.65          | 0.67      | \                          | 0.62                   | 0.67      |
+| f1 score  | 0.50          | 0.47      | \                          | 0.45                   | 0.49      |
 
+把以上模型评价都绘制到一张图中，可以发现，在这个数据集上，各个模型结果差不多。
+
+![image-20211219220450425](C:\Users\dell\AppData\Roaming\Typora\typora-user-images\image-20211219220450425.png)
 
 ## 参考资料
 
