@@ -2,8 +2,6 @@
 
 邵一淼  191098180
 
-README还需再补充一些
-
 [TOC]
 
 
@@ -358,7 +356,7 @@ print('test f1-score is : %f'%(2*recal*prec/(prec+recal)))
 
 从前面代码实现部分任务四最后的结果来看，使用逻辑回归的分类效果很不理想，于是想到用其他分类模型来尝试
 
-观察任务四的代码，逻辑回归主要是使用的pyspark.ml.classification这个包，于是打开源码来看一下这个包里面还实现了一些什么其他算法，源码可在Anaconda文件夹下的Lib\site-packages\pyspark\ml.classification.py中查看
+观察任务四的代码，逻辑回归主要是使用的pyspark.ml.classification模块，于是打开源码来看一下这个包里面还实现了一些什么其他算法，源码可在Anaconda文件夹下的Lib\site-packages\pyspark\ml.classification.py中查看
 
 这个包一共实现了10个分类模型
 
@@ -389,6 +387,34 @@ __all__ = ['LinearSVC', 'LinearSVCModel',
 把以上模型评价都绘制到一张图中，可以发现，在这个数据集上，各个模型结果差不多。
 
 ![image-20211219220450425](C:\Users\dell\AppData\Roaming\Typora\typora-user-images\image-20211219220450425.png)
+
+
+
+### pyspark.ml
+
+接上一思考，既然查看了pyspark.ml.classification模块源码，那么干脆一起看看ml中还有哪些模块，以及这些模块都干了什么
+
+
+
+| 模块           | 功能                                                         |
+| -------------- | ------------------------------------------------------------ |
+| _init_         | 介绍了ml包包含了哪些模块，并说明ml的功能即“基于dataframe的机器学习 API，让用户能够快速组装和配置实用的机器学习pipeline |
+| base           | 一些常用方法，如fit、transform等                             |
+| classification | 提供了一些机器学习分类模型的api                              |
+| clustering     | 提供了一些聚类模型的api，主要有K-Means、高斯混合模型和LDA    |
+| common         | 基于sys模块，主要实现py2java和java2py                        |
+| evaluation     | 有二元分类、回归、多分类、聚类、排序的评估的接口             |
+| feature        | 分词、停用词处理、字符串编码、OneHot编码等数据处理方法       |
+| image          | 将数组转换为二维图像、返回opencv支持的图类型、返回图像架构等一系列图操作 |
+| recommendation | 一些推荐算法，其实只有ALS                                    |
+| regression     | 很多回归算法api                                              |
+| stat           | 相关性、统计检验、方差、均值等一系列api                      |
+| tests          | 基于 MLlib Python DataFrame 的 API 的单元测试。              |
+| tuning         | 没太看懂                                                     |
+
+
+
+
 
 ## 参考资料
 
